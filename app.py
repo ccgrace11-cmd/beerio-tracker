@@ -187,23 +187,22 @@ Use null ONLY if you truly cannot find the character."""
         return {"error": f"Failed to parse AI response: {str(e)}", "raw": response_text}
 
 
-def absolute_to_relative(players_found: dict) -> dict:
-    """Convert absolute positions (1-12) to relative positions among human players (1-5)."""
-    # Filter out null values and sort by position
-    active_players = {k: v for k, v in players_found.items() if v is not None}
-    sorted_players = sorted(active_players.items(), key=lambda x: x[1])
+# MK8D points by finishing position (1st-12th)
+MK8D_POINTS = {
+    1: 15, 2: 12, 3: 10, 4: 9, 5: 8, 6: 7,
+    7: 6, 8: 5, 9: 4, 10: 3, 11: 2, 12: 1
+}
 
-    # Assign relative positions
-    relative = {}
-    for i, (player, _) in enumerate(sorted_players, 1):
-        relative[player] = i
 
-    # Add null for inactive players
-    for player in PLAYERS:
-        if player not in relative:
-            relative[player] = None
-
-    return relative
+def position_to_points(players_found: dict) -> dict:
+    """Convert absolute positions (1-12) to MK8D points."""
+    points = {}
+    for player, position in players_found.items():
+        if position is not None and position in MK8D_POINTS:
+            points[player] = MK8D_POINTS[position]
+        else:
+            points[player] = None
+    return points
 
 
 @app.route("/")
@@ -237,13 +236,13 @@ def parse_image():
         if "error" in result:
             return jsonify(result), 500
 
-        # Convert to relative positions
+        # Convert positions to points
         absolute_positions = result.get("players_found", {})
-        relative_positions = absolute_to_relative(absolute_positions)
+        points = position_to_points(absolute_positions)
 
         return jsonify({
             "absolute_positions": absolute_positions,
-            "relative_positions": relative_positions,
+            "points": points,
             "confidence": result.get("confidence", "unknown"),
             "participating_players": participating_players
         })
@@ -261,7 +260,7 @@ def submit_results():
         return jsonify({"error": "No data provided"}), 400
 
     race_type = data.get("race_type")
-    positions = data.get("positions", {})
+    points = data.get("points", {})
 
     if not race_type:
         return jsonify({"error": "Race type is required"}), 400
@@ -309,16 +308,16 @@ def submit_results():
         # Format date as "Mon D YYYY" (e.g., "Jun 5 2025")
         today = datetime.now().strftime("%b %-d %Y")
 
-        # Build the row: Race ID, Race Type, Date, Emma, Emily, Matty, Jake, Skinny
+        # Build the row: Race ID, Race Type, Date, Emma, Emily, Matty, Jake, Skinny (points)
         row_data = [
             next_race_id,
             race_type,
             today,
-            positions.get("Emma", ""),
-            positions.get("Emily", ""),
-            positions.get("Matty", ""),
-            positions.get("Jake", ""),
-            positions.get("Skinny", "")
+            points.get("Emma", ""),
+            points.get("Emily", ""),
+            points.get("Matty", ""),
+            points.get("Jake", ""),
+            points.get("Skinny", "")
         ]
 
         # Update specific row instead of appending

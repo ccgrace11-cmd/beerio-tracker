@@ -53,8 +53,8 @@
             <div class="results-grid">
                 {% for player in players %}
                 <div class="result-row">
-                    <label for="pos-{{ player }}" class="player-name">{{ player }}</label>
-                    <input type="number" id="pos-{{ player }}" class="position-input" min="1" max="5" placeholder="-">
+                    <label for="pts-{{ player }}" class="player-name">{{ player }}</label>
+                    <input type="number" id="pts-{{ player }}" class="position-input" min="1" max="15" placeholder="-">
                 </div>
                 {% endfor %}
             </div>
@@ -158,12 +158,12 @@
                     showStatus('Error: ' + data.error, 'error');
                     parseBtn.disabled = false;
                 } else {
-                    // Populate results
-                    const positions = data.relative_positions;
-                    for (const [player, pos] of Object.entries(positions)) {
-                        const input = document.getElementById('pos-' + player);
+                    // Populate results with points
+                    const points = data.points;
+                    for (const [player, pts] of Object.entries(points)) {
+                        const input = document.getElementById('pts-' + player);
                         if (input) {
-                            input.value = pos || '';
+                            input.value = pts || '';
                         }
                     }
 
@@ -189,12 +189,12 @@
             console.log('Submit button clicked!');
             submitBtn.disabled = true;
 
-            const positions = {};
+            const points = {};
             const players = ['Emma', 'Emily', 'Matty', 'Jake', 'Skinny'];
             for (const player of players) {
-                const input = document.getElementById('pos-' + player);
+                const input = document.getElementById('pts-' + player);
                 const val = input.value.trim();
-                positions[player] = val ? parseInt(val) : null;
+                points[player] = val ? parseInt(val) : null;
             }
 
             try {
@@ -203,7 +203,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         race_type: raceType.value,
-                        positions: positions
+                        points: points
                     })
                 });
 
@@ -283,10 +283,10 @@
             status.style.display = 'none';
             document.getElementById('screenshot-section').style.display = 'none';
 
-            // Clear position inputs
+            // Clear points inputs
             const players = ['Emma', 'Emily', 'Matty', 'Jake', 'Skinny'];
             for (const player of players) {
-                const input = document.getElementById('pos-' + player);
+                const input = document.getElementById('pts-' + player);
                 if (input) input.value = '';
             }
 
