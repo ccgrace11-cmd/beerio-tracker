@@ -342,8 +342,8 @@ def get_summary_screenshot():
         spreadsheet_id = os.getenv("SPREADSHEET_ID")
         summary_gid = os.getenv("SUMMARY_GID", "1357725660")
 
-        # Use the embedded/preview view for a cleaner look
-        sheet_url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/preview#gid={summary_gid}"
+        # Use the pubhtml view which works without authentication
+        sheet_url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/pubhtml?gid={summary_gid}&single=true&widget=false&headers=false&chrome=false"
 
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
@@ -351,10 +351,10 @@ def get_summary_screenshot():
             page = browser.new_page(viewport={"width": 1150, "height": 700})
 
             # Navigate to the sheet
-            page.goto(sheet_url, wait_until="domcontentloaded", timeout=60000)
+            page.goto(sheet_url, wait_until="networkidle", timeout=60000)
 
             # Wait for the spreadsheet content to render
-            page.wait_for_timeout(4000)
+            page.wait_for_timeout(3000)
 
             # Take screenshot - cropped to show tables and graphs with balanced padding
             screenshot_bytes = page.screenshot(
