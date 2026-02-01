@@ -114,29 +114,27 @@ def parse_race_image(image_base64: str, participating_players: list[str] = None)
         if player in PLAYER_CHARACTERS
     ])
 
-    # Build the example JSON with only participating players
-    example_players = {player: (i + 1) for i, player in enumerate(participating_players)}
-    example_json = json.dumps({"players_found": example_players, "confidence": "high"}, indent=2)
+    # Build the example JSON with only participating players (showing example points)
+    example_points = {player: 45 - (i * 5) for i, player in enumerate(participating_players)}
+    example_json = json.dumps({"points": example_points, "confidence": "high"}, indent=2)
 
-    prompt = f"""Find the finishing positions (1-12) of these players in the Mario Kart 8 Deluxe results screen.
+    prompt = f"""Extract the TOTAL GRAND PRIX POINTS for each player from this Mario Kart 8 Deluxe results screen.
 
 PLAYERS TO FIND:
 {char_list}
 
-CRITICAL: Look at the small circular character ICON next to each racer name.
+CRITICAL: Look at the POINTS displayed on the RIGHT SIDE of each racer's row. This is a number (typically between 0-60 for a full Grand Prix).
 
-For BLACK YOSHI (Skinny): Look for ANY very dark/black circular icon. The icon will appear much darker than other Yoshis - almost black or very dark gray. Even if it's hard to see details, a dark round icon = Black Yoshi = Skinny.
+For each character, find their row and read the POINT TOTAL shown on the right side.
 
-For GREEN YOSHI (Matty): Bright green circular icon.
-For BLUE YOSHI (Emily): Light blue/cyan circular icon.
-For TOAD (Emma): Red and white mushroom icon.
-For DONKEY KONG (Jake): Brown gorilla face icon.
+For BLACK YOSHI (Skinny): Look for ANY very dark/black dinosaur icon.
+For GREEN YOSHI (Matty): Bright green dinosaur icon.
+For BLUE YOSHI (Emily): Light blue/cyan dinosaur icon.
+For TOAD (Emma): Red and white mushroom character.
+For DONKEY KONG (Jake): Brown gorilla with red tie.
 
-IMPORTANT: If you see a dark/black icon that could be a Yoshi, it IS Black Yoshi (Skinny).
-
-Position 1 is at top of the screen, position 12 at bottom.
-
-Return JSON: {example_json}
+Return JSON with the POINTS (the number shown on screen), NOT the position:
+{example_json}
 
 Use null ONLY if you truly cannot find the character."""
 
@@ -187,24 +185,6 @@ Use null ONLY if you truly cannot find the character."""
         return {"error": f"Failed to parse AI response: {str(e)}", "raw": response_text}
 
 
-# MK8D points by finishing position (1st-12th)
-MK8D_POINTS = {
-    1: 15, 2: 12, 3: 10, 4: 9, 5: 8, 6: 7,
-    7: 6, 8: 5, 9: 4, 10: 3, 11: 2, 12: 1
-}
-
-
-def position_to_points(players_found: dict) -> dict:
-    """Convert absolute positions (1-12) to MK8D points."""
-    points = {}
-    for player, position in players_found.items():
-        if position is not None and position in MK8D_POINTS:
-            points[player] = MK8D_POINTS[position]
-        else:
-            points[player] = None
-    return points
-
-
 @app.route("/")
 def index():
     """Serve the main upload page."""
@@ -236,12 +216,10 @@ def parse_image():
         if "error" in result:
             return jsonify(result), 500
 
-        # Convert positions to points
-        absolute_positions = result.get("players_found", {})
-        points = position_to_points(absolute_positions)
+        # Get points directly from Claude's response
+        points = result.get("points", {})
 
         return jsonify({
-            "absolute_positions": absolute_positions,
             "points": points,
             "confidence": result.get("confidence", "unknown"),
             "participating_players": participating_players
