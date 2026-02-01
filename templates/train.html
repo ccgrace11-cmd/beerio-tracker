@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK8D Training Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .training-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .stats-bar {
+            background: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .stat-item {
+            font-size: 14px;
+        }
+        .stat-value {
+            font-weight: bold;
+            color: #2196F3;
+        }
+        .image-container {
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .sample-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .comparison-header {
+            font-weight: bold;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .player-row {
+            display: contents;
+        }
+        .player-name-cell {
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .ai-guess-cell {
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .ai-guess-cell.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .ai-guess-cell.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .correct-input {
+            width: 100%;
+            padding: 8px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .correct-input:focus {
+            border-color: #2196F3;
+            outline: none;
+        }
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .btn-next {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .btn-next:hover {
+            background: #43A047;
+        }
+        .btn-next:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .btn-skip {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: #9e9e9e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .filename-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+        .result-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .result-message.partial {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="training-container">
+        <a href="/" class="home-link">&larr; Back to Race Tracker</a>
+        <h1>AI Training Interface</h1>
+
+        <div class="stats-bar">
+            <div class="stat-item">Images: <span class="stat-value" id="images-reviewed">0</span> / <span id="total-images">122</span></div>
+            <div class="stat-item">Remaining: <span class="stat-value" id="remaining">122</span></div>
+            <div class="stat-item">Overall Accuracy: <span class="stat-value" id="accuracy">-</span></div>
+        </div>
+
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <p id="loading-text">Loading image...</p>
+        </div>
+
+        <div id="main-content" style="display: none;">
+            <p class="filename-label">File: <span id="current-filename">-</span></p>
+
+            <div class="image-container">
+                <img id="sample-image" class="sample-image" alt="Sample MK8D results">
+            </div>
+
+            <div id="result-message" class="result-message" style="display: none;"></div>
+
+            <div class="comparison-grid">
+                <div class="comparison-header">Player</div>
+                <div class="comparison-header">AI Guess</div>
+                <div class="comparison-header">Correct Answer</div>
+
+                {% for player in players %}
+                <div class="player-row">
+                    <div class="player-name-cell">{{ player }}</div>
+                    <div class="ai-guess-cell" id="ai-{{ player }}">-</div>
+                    <div>
+                        <input type="number" class="correct-input" id="correct-{{ player }}" min="0" max="60" placeholder="-">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="button-row">
+                <button class="btn-next" id="submit-btn" onclick="submitFeedback()">Submit & Next</button>
+                <button class="btn-skip" onclick="loadNextImage()">Skip</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const players = ['Emma', 'Emily', 'Matty', 'Jake', 'Skinny'];
+        let currentFilename = null;
+        let currentAiGuess = {};
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/train/stats');
+                const data = await response.json();
+
+                if (data.stats) {
+                    document.getElementById('images-reviewed').textContent = data.feedback_count;
+                    if (data.stats.total > 0) {
+                        const pct = Math.round((data.stats.correct / data.stats.total) * 100);
+                        document.getElementById('accuracy').textContent = pct + '%';
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading stats:', err);
+            }
+        }
+
+        async function loadNextImage() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('loading-text').textContent = 'Loading image...';
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('result-message').style.display = 'none';
+
+            // Clear previous values
+            for (const player of players) {
+                document.getElementById('ai-' + player).textContent = '-';
+                document.getElementById('ai-' + player).className = 'ai-guess-cell';
+                document.getElementById('correct-' + player).value = '';
+            }
+
+            try {
+                // Get random image
+                const randomResponse = await fetch('/api/train/random');
+                const randomData = await randomResponse.json();
+
+                if (randomData.error) {
+                    alert('Error: ' + randomData.error);
+                    return;
+                }
+
+                currentFilename = randomData.filename;
+                document.getElementById('current-filename').textContent = currentFilename;
+                document.getElementById('total-images').textContent = randomData.total_images;
+                document.getElementById('remaining').textContent = randomData.remaining;
+
+                // Load image
+                document.getElementById('sample-image').src = '/api/train/image/' + encodeURIComponent(currentFilename);
+
+                // Parse image with AI
+                document.getElementById('loading-text').textContent = 'AI analyzing image...';
+
+                const parseResponse = await fetch('/api/train/parse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: currentFilename })
+                });
+
+                const parseData = await parseResponse.json();
+
+                if (parseData.error) {
+                    alert('Parse error: ' + parseData.error);
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    return;
+                }
+
+                currentAiGuess = parseData.points || {};
+
+                // Display AI guesses
+                for (const player of players) {
+                    const val = currentAiGuess[player];
+                    document.getElementById('ai-' + player).textContent = val !== null && val !== undefined ? val : '-';
+                }
+
+                document.getElementById('loading-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+
+            } catch (err) {
+                alert('Error: ' + err.message);
+                document.getElementById('loading-overlay').style.display = 'none';
+            }
+        }
+
+        async function submitFeedback() {
+            const correctAnswer = {};
+            let hasAnyValue = false;
+
+            for (const player of players) {
+                const input = document.getElementById('correct-' + player);
+                const val = input.value.trim();
+                if (val) {
+                    correctAnswer[player] = parseInt(val);
+                    hasAnyValue = true;
+                } else {
+                    correctAnswer[player] = null;
+                }
+            }
+
+            if (!hasAnyValue) {
+                alert('Please enter at least one correct value');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/train/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        filename: currentFilename,
+                        ai_guess: currentAiGuess,
+                        correct_answer: correctAnswer
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+
+                // Highlight correct/incorrect
+                for (const player of players) {
+                    const aiCell = document.getElementById('ai-' + player);
+                    const aiVal = currentAiGuess[player];
+                    const correctVal = correctAnswer[player];
+
+                    if (correctVal !== null) {
+                        if (aiVal === correctVal) {
+                            aiCell.classList.add('correct');
+                        } else {
+                            aiCell.classList.add('error');
+                        }
+                    }
+                }
+
+                // Show result message
+                const resultMsg = document.getElementById('result-message');
+                if (data.errors.length === 0) {
+                    resultMsg.textContent = 'Perfect! AI got all answers correct.';
+                    resultMsg.className = 'result-message success';
+                } else {
+                    resultMsg.textContent = `AI made ${data.errors.length} mistake(s). Overall accuracy: ${Math.round(data.accuracy * 100)}%`;
+                    resultMsg.className = 'result-message partial';
+                }
+                resultMsg.style.display = 'block';
+
+                // Update stats
+                loadStats();
+
+                // Auto-load next after delay
+                setTimeout(() => {
+                    loadNextImage();
+                }, 2000);
+
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        // Initialize
+        loadStats();
+        loadNextImage();
+    </script>
+</body>
+</html>

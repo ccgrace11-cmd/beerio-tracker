@@ -4,6 +4,8 @@ import json
 import base64
 import io
 from datetime import datetime
+import random
+import glob
 from flask import Flask, render_template, request, jsonify, send_file
 from dotenv import load_dotenv
 import anthropic
@@ -357,6 +359,212 @@ def get_summary_screenshot():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# Training interface routes
+SAMPLE_IMAGES_DIR = os.path.expanduser("~/Downloads/Sample MK Results")
+TRAINING_DATA_FILE = os.path.join(os.path.dirname(__file__), "training_data", "feedback.json")
+
+
+def load_training_data():
+    """Load existing training feedback data."""
+    if os.path.exists(TRAINING_DATA_FILE):
+        with open(TRAINING_DATA_FILE, 'r') as f:
+            return json.load(f)
+    return {"feedback": [], "stats": {"total": 0, "correct": 0}}
+
+
+def save_training_data(data):
+    """Save training feedback data."""
+    os.makedirs(os.path.dirname(TRAINING_DATA_FILE), exist_ok=True)
+    with open(TRAINING_DATA_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+
+@app.route("/train")
+def train():
+    """Serve the training interface."""
+    return render_template("train.html", players=PLAYERS)
+
+
+@app.route("/api/train/random")
+def get_random_sample():
+    """Get a random sample image for training."""
+    # Get all image files
+    patterns = ["*.HEIC", "*.heic", "*.jpg", "*.jpeg", "*.png"]
+    all_images = []
+    for pattern in patterns:
+        all_images.extend(glob.glob(os.path.join(SAMPLE_IMAGES_DIR, pattern)))
+
+    if not all_images:
+        return jsonify({"error": "No sample images found"}), 404
+
+    # Load training data to see which images have been reviewed
+    training_data = load_training_data()
+    reviewed = {f["filename"] for f in training_data["feedback"]}
+
+    # Prefer unreveiwed images
+    unreviewed = [img for img in all_images if os.path.basename(img) not in reviewed]
+
+    if unreviewed:
+        selected = random.choice(unreviewed)
+    else:
+        selected = random.choice(all_images)
+
+    filename = os.path.basename(selected)
+
+    return jsonify({
+        "filename": filename,
+        "total_images": len(all_images),
+        "reviewed_count": len(reviewed),
+        "remaining": len(unreviewed)
+    })
+
+
+@app.route("/api/train/image/<filename>")
+def serve_sample_image(filename):
+    """Serve a sample image file."""
+    filepath = os.path.join(SAMPLE_IMAGES_DIR, filename)
+
+    if not os.path.exists(filepath):
+        return jsonify({"error": "Image not found"}), 404
+
+    # Convert HEIC to JPEG for browser compatibility
+    if filename.lower().endswith('.heic'):
+        image = Image.open(filepath)
+        if image.mode in ('RGBA', 'P'):
+            image = image.convert('RGB')
+        output = io.BytesIO()
+        image.save(output, format='JPEG', quality=85)
+        output.seek(0)
+        return send_file(output, mimetype='image/jpeg')
+
+    return send_file(filepath)
+
+
+@app.route("/api/train/parse", methods=["POST"])
+def parse_training_image():
+    """Parse a training image by filename."""
+    data = request.get_json()
+    filename = data.get("filename")
+
+    if not filename:
+        return jsonify({"error": "No filename provided"}), 400
+
+    filepath = os.path.join(SAMPLE_IMAGES_DIR, filename)
+
+    if not os.path.exists(filepath):
+        return jsonify({"error": "Image not found"}), 404
+
+    try:
+        # Read and convert image
+        with open(filepath, 'rb') as f:
+            image_bytes = f.read()
+
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+        image_data, _ = convert_image_to_jpeg(image_base64)
+
+        # Parse with Claude
+        result = parse_race_image(image_data, PLAYERS)
+
+        if "error" in result:
+            return jsonify(result), 500
+
+        points = result.get("points") or result.get("players_found", {})
+
+        return jsonify({
+            "points": points,
+            "confidence": result.get("confidence", "unknown")
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/train/feedback", methods=["POST"])
+def save_feedback():
+    """Save training feedback."""
+    data = request.get_json()
+
+    filename = data.get("filename")
+    ai_guess = data.get("ai_guess", {})
+    correct_answer = data.get("correct_answer", {})
+
+    if not filename:
+        return jsonify({"error": "No filename provided"}), 400
+
+    # Load existing data
+    training_data = load_training_data()
+
+    # Calculate accuracy for this sample
+    correct_count = 0
+    total_count = 0
+    errors = []
+
+    for player in PLAYERS:
+        ai_val = ai_guess.get(player)
+        correct_val = correct_answer.get(player)
+
+        if correct_val is not None:
+            total_count += 1
+            if ai_val == correct_val:
+                correct_count += 1
+            else:
+                errors.append({
+                    "player": player,
+                    "ai_guess": ai_val,
+                    "correct": correct_val
+                })
+
+    # Add feedback entry
+    feedback_entry = {
+        "filename": filename,
+        "timestamp": datetime.now().isoformat(),
+        "ai_guess": ai_guess,
+        "correct_answer": correct_answer,
+        "errors": errors,
+        "accuracy": correct_count / total_count if total_count > 0 else 0
+    }
+
+    training_data["feedback"].append(feedback_entry)
+    training_data["stats"]["total"] += 1
+    if len(errors) == 0:
+        training_data["stats"]["correct"] += 1
+
+    save_training_data(training_data)
+
+    return jsonify({
+        "success": True,
+        "accuracy": feedback_entry["accuracy"],
+        "errors": errors,
+        "overall_stats": training_data["stats"]
+    })
+
+
+@app.route("/api/train/stats")
+def get_training_stats():
+    """Get training statistics."""
+    training_data = load_training_data()
+
+    # Analyze common errors
+    error_counts = {}
+    for feedback in training_data["feedback"]:
+        for error in feedback.get("errors", []):
+            player = error["player"]
+            if player not in error_counts:
+                error_counts[player] = {"count": 0, "examples": []}
+            error_counts[player]["count"] += 1
+            if len(error_counts[player]["examples"]) < 5:
+                error_counts[player]["examples"].append({
+                    "ai": error["ai_guess"],
+                    "correct": error["correct"]
+                })
+
+    return jsonify({
+        "stats": training_data["stats"],
+        "error_analysis": error_counts,
+        "feedback_count": len(training_data["feedback"])
+    })
 
 
 if __name__ == "__main__":
