@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 import anthropic
 import gspread
 from google.oauth2.service_account import Credentials
-from PIL import Image
+from PIL import Image, ImageOps
 import pillow_heif
 from playwright.sync_api import sync_playwright
 
@@ -75,6 +75,10 @@ def convert_image_to_jpeg(image_base64: str) -> tuple[str, str]:
 
     # Open with Pillow (which now supports HEIC via pillow-heif)
     image = Image.open(io.BytesIO(image_bytes))
+
+    # Apply EXIF orientation - critical for iPhone photos!
+    # Without this, images from phones may be rotated/flipped incorrectly
+    image = ImageOps.exif_transpose(image)
 
     # Convert to RGB if necessary (handles RGBA, etc.)
     if image.mode in ('RGBA', 'P'):
