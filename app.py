@@ -217,7 +217,15 @@ def parse_image():
             return jsonify(result), 500
 
         # Get points directly from Claude's response
-        points = result.get("points", {})
+        points = result.get("points")
+
+        # Handle case where Claude returned data in unexpected format
+        if not points:
+            # Check if Claude returned players_found instead (old format)
+            if "players_found" in result:
+                points = result.get("players_found")
+            else:
+                return jsonify({"error": f"Could not extract points. Raw response: {result}"}), 500
 
         return jsonify({
             "points": points,
