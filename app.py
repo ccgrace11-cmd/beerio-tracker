@@ -125,20 +125,34 @@ def parse_race_image(image_base64: str, participating_players: list[str] = None)
 PLAYERS TO FIND:
 {char_list}
 
-CRITICAL: Look at the POINTS displayed on the RIGHT SIDE of each racer's row. This is a number (typically between 0-60 for a full Grand Prix).
+INSTRUCTIONS:
+1. Find each character's row in the results list
+2. Read the POINT TOTAL displayed on the RIGHT SIDE of their row (typically 0-60)
+3. Be VERY careful reading digits - common confusions are 5/6, 6/8, 3/5
 
-For each character, find their row and read the POINT TOTAL shown on the right side.
+CHARACTER IDENTIFICATION (in order of difficulty):
 
-For BLACK YOSHI (Skinny): Look for ANY very dark/black dinosaur icon.
-For GREEN YOSHI (Matty): Bright green dinosaur icon.
-For BLUE YOSHI (Emily): Light blue/cyan dinosaur icon.
-For TOAD (Emma): Red and white mushroom character.
-For DONKEY KONG (Jake): Brown gorilla with red tie.
+BLACK YOSHI (Skinny) - HARDEST TO SPOT:
+- Very dark gray/charcoal colored dinosaur - almost black
+- Can blend into dark backgrounds - look carefully!
+- Same shape as other Yoshis but MUCH darker
+- If you see a Yoshi that looks dark/shadowy, it's Black Yoshi
 
-Return JSON with the POINTS (the number shown on screen), NOT the position:
+GREEN YOSHI (Matty): Bright lime green dinosaur - classic Yoshi color
+BLUE YOSHI (Emily): Light blue/cyan/sky blue dinosaur
+TOAD (Emma): Small character with white mushroom cap and red spots
+DONKEY KONG (Jake): Large brown gorilla with red necktie
+
+READING NUMBERS CAREFULLY:
+- Look at each digit individually
+- 5 has a flat top, 6 has a curved top
+- 8 has two loops, 6 has one loop at bottom
+- Double-check your reading before responding
+
+Return JSON with the POINTS (the number shown on screen):
 {example_json}
 
-Use null ONLY if you truly cannot find the character."""
+Use null ONLY if the character is truly not in this race."""
 
     system_prompt = """You are a Mario Kart 8 Deluxe race results analyzer. You MUST respond with ONLY valid JSON - no explanations, no markdown code blocks, just raw JSON. Identify characters by their visual appearance (color and shape), not by player names which vary by console."""
 

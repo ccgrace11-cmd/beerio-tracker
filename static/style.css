@@ -314,7 +314,51 @@ h2 {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Review layout - photo alongside scores */
+.review-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.review-image {
+    flex: 1;
+    min-width: 0;
+}
+
+.review-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.review-scores {
+    flex: 0 0 200px;
+}
+
+/* Expand container for review layout */
+#results-section {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
 /* Mobile optimizations */
+@media (max-width: 600px) {
+    .review-layout {
+        flex-direction: column;
+    }
+
+    .review-scores {
+        flex: none;
+        width: 100%;
+    }
+
+    #results-section {
+        max-width: 500px;
+    }
+}
+
 @media (max-width: 480px) {
     body {
         padding: 12px;

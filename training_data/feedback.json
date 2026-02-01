@@ -1,0 +1,1038 @@
+{
+  "feedback": [
+    {
+      "filename": "IMG_3340.HEIC",
+      "timestamp": "2026-02-01T12:34:45.247700",
+      "ai_guess": {
+        "Emily": 44,
+        "Emma": 38,
+        "Jake": 8,
+        "Matty": 38,
+        "Skinny": 48
+      },
+      "correct_answer": {
+        "Emma": 39,
+        "Emily": 44,
+        "Matty": 38,
+        "Jake": 8,
+        "Skinny": 46
+      },
+      "errors": [
+        {
+          "player": "Emma",
+          "ai_guess": 38,
+          "correct": 39
+        },
+        {
+          "player": "Skinny",
+          "ai_guess": 48,
+          "correct": 46
+        }
+      ],
+      "accuracy": 0.6
+    },
+    {
+      "filename": "IMG_3294.HEIC",
+      "timestamp": "2026-02-01T12:35:26.244956",
+      "ai_guess": {
+        "Emily": 43,
+        "Emma": 46,
+        "Jake": null,
+        "Matty": 39,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 46,
+        "Emily": 43,
+        "Matty": 39,
+        "Jake": null,
+        "Skinny": 50
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 50
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2747.HEIC",
+      "timestamp": "2026-02-01T12:35:52.730543",
+      "ai_guess": {
+        "Emily": 47,
+        "Emma": 45,
+        "Jake": null,
+        "Matty": 43,
+        "Skinny": 47
+      },
+      "correct_answer": {
+        "Emma": 46,
+        "Emily": 47,
+        "Matty": 43,
+        "Jake": null,
+        "Skinny": 47
+      },
+      "errors": [
+        {
+          "player": "Emma",
+          "ai_guess": 45,
+          "correct": 46
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_3145.HEIC",
+      "timestamp": "2026-02-01T12:36:20.101628",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 55,
+        "Jake": null,
+        "Matty": 36,
+        "Skinny": 48
+      },
+      "correct_answer": {
+        "Emma": 55,
+        "Emily": null,
+        "Matty": 36,
+        "Jake": null,
+        "Skinny": 46
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": 48,
+          "correct": 46
+        }
+      ],
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "filename": "IMG_2622.HEIC",
+      "timestamp": "2026-02-01T12:37:02.746280",
+      "ai_guess": {
+        "Emily": 27,
+        "Emma": 42,
+        "Jake": 13,
+        "Matty": 37,
+        "Skinny": 32
+      },
+      "correct_answer": {
+        "Emma": 42,
+        "Emily": 27,
+        "Matty": 37,
+        "Jake": null,
+        "Skinny": 32
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3292.HEIC",
+      "timestamp": "2026-02-01T12:37:30.916249",
+      "ai_guess": {
+        "Emily": 51,
+        "Emma": 40,
+        "Jake": null,
+        "Matty": 45,
+        "Skinny": 48
+      },
+      "correct_answer": {
+        "Emma": 40,
+        "Emily": 51,
+        "Matty": 45,
+        "Jake": null,
+        "Skinny": 48
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2815.HEIC",
+      "timestamp": "2026-02-01T12:37:49.308997",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 52,
+        "Jake": null,
+        "Matty": 52,
+        "Skinny": 42
+      },
+      "correct_answer": {
+        "Emma": 52,
+        "Emily": null,
+        "Matty": 52,
+        "Jake": null,
+        "Skinny": 42
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2719.HEIC",
+      "timestamp": "2026-02-01T12:38:08.733795",
+      "ai_guess": {
+        "Emily": 35,
+        "Emma": 51,
+        "Jake": null,
+        "Matty": 51,
+        "Skinny": 45
+      },
+      "correct_answer": {
+        "Emma": 51,
+        "Emily": 35,
+        "Matty": 51,
+        "Jake": null,
+        "Skinny": 45
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2837.HEIC",
+      "timestamp": "2026-02-01T12:38:51.881852",
+      "ai_guess": {
+        "Emily": 36,
+        "Emma": 38,
+        "Jake": 28,
+        "Matty": 51,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 38,
+        "Emily": 35,
+        "Matty": 51,
+        "Jake": 28,
+        "Skinny": null
+      },
+      "errors": [
+        {
+          "player": "Emily",
+          "ai_guess": 36,
+          "correct": 35
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2811.HEIC",
+      "timestamp": "2026-02-01T12:39:15.630482",
+      "ai_guess": {
+        "Emily": 41,
+        "Emma": 42,
+        "Jake": 49,
+        "Matty": 47,
+        "Skinny": 37
+      },
+      "correct_answer": {
+        "Emma": 42,
+        "Emily": 41,
+        "Matty": 47,
+        "Jake": 49,
+        "Skinny": 37
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3060.HEIC",
+      "timestamp": "2026-02-01T12:39:41.386867",
+      "ai_guess": {
+        "Emily": 37,
+        "Emma": 49,
+        "Jake": 51,
+        "Matty": 36,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 49,
+        "Emily": 37,
+        "Matty": 36,
+        "Jake": 51,
+        "Skinny": 43
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 43
+        }
+      ],
+      "accuracy": 0.8
+    },
+    {
+      "filename": "IMG_2932.HEIC",
+      "timestamp": "2026-02-01T12:40:08.780303",
+      "ai_guess": {
+        "Emily": 37,
+        "Emma": 51,
+        "Jake": null,
+        "Matty": 35,
+        "Skinny": 41
+      },
+      "correct_answer": {
+        "Emma": 51,
+        "Emily": 37,
+        "Matty": 55,
+        "Jake": null,
+        "Skinny": 41
+      },
+      "errors": [
+        {
+          "player": "Matty",
+          "ai_guess": 35,
+          "correct": 55
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_3047.HEIC",
+      "timestamp": "2026-02-01T12:40:29.730739",
+      "ai_guess": {
+        "Emily": 39,
+        "Emma": 45,
+        "Jake": null,
+        "Matty": null,
+        "Skinny": 57
+      },
+      "correct_answer": {
+        "Emma": 45,
+        "Emily": 39,
+        "Matty": null,
+        "Jake": null,
+        "Skinny": 57
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2745.HEIC",
+      "timestamp": "2026-02-01T12:40:50.451902",
+      "ai_guess": {
+        "Emily": 41,
+        "Emma": 46,
+        "Jake": null,
+        "Matty": 37,
+        "Skinny": 42
+      },
+      "correct_answer": {
+        "Emma": 46,
+        "Emily": 41,
+        "Matty": 37,
+        "Jake": null,
+        "Skinny": 42
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2720.HEIC",
+      "timestamp": "2026-02-01T12:41:16.707605",
+      "ai_guess": {
+        "Emily": 49,
+        "Emma": 52,
+        "Jake": 14,
+        "Matty": 31,
+        "Skinny": 38
+      },
+      "correct_answer": {
+        "Emma": 52,
+        "Emily": 45,
+        "Matty": 31,
+        "Jake": 14,
+        "Skinny": 36
+      },
+      "errors": [
+        {
+          "player": "Emily",
+          "ai_guess": 49,
+          "correct": 45
+        },
+        {
+          "player": "Skinny",
+          "ai_guess": 38,
+          "correct": 36
+        }
+      ],
+      "accuracy": 0.6
+    },
+    {
+      "filename": "IMG_2901.HEIC",
+      "timestamp": "2026-02-01T12:41:39.343432",
+      "ai_guess": {
+        "Emily": 33,
+        "Emma": 32,
+        "Jake": 47,
+        "Matty": 48,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 32,
+        "Emily": 33,
+        "Matty": 48,
+        "Jake": 47,
+        "Skinny": 39
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 39
+        }
+      ],
+      "accuracy": 0.8
+    },
+    {
+      "filename": "IMG_4670.HEIC",
+      "timestamp": "2026-02-01T12:42:06.462177",
+      "ai_guess": {
+        "Emily": 37,
+        "Emma": 35,
+        "Jake": 46,
+        "Matty": 48,
+        "Skinny": 38
+      },
+      "correct_answer": {
+        "Emma": 35,
+        "Emily": 37,
+        "Matty": 48,
+        "Jake": 46,
+        "Skinny": 38
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2688.HEIC",
+      "timestamp": "2026-02-01T12:42:29.298570",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 45,
+        "Jake": 43,
+        "Matty": 45,
+        "Skinny": 36
+      },
+      "correct_answer": {
+        "Emma": 45,
+        "Emily": null,
+        "Matty": 45,
+        "Jake": 43,
+        "Skinny": 36
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2751.HEIC",
+      "timestamp": "2026-02-01T12:43:02.722105",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 54,
+        "Jake": 33,
+        "Matty": 42,
+        "Skinny": 41
+      },
+      "correct_answer": {
+        "Emma": 54,
+        "Emily": null,
+        "Matty": 42,
+        "Jake": 33,
+        "Skinny": 41
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2834.HEIC",
+      "timestamp": "2026-02-01T12:43:22.658811",
+      "ai_guess": {
+        "Emily": 41,
+        "Emma": 46,
+        "Jake": null,
+        "Matty": 49,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 45,
+        "Emily": 41,
+        "Matty": 49,
+        "Jake": null,
+        "Skinny": null
+      },
+      "errors": [
+        {
+          "player": "Emma",
+          "ai_guess": 46,
+          "correct": 45
+        }
+      ],
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "filename": "IMG_3094.HEIC",
+      "timestamp": "2026-02-01T12:43:46.793300",
+      "ai_guess": {
+        "Emily": 49,
+        "Emma": 52,
+        "Jake": null,
+        "Matty": null,
+        "Skinny": 45
+      },
+      "correct_answer": {
+        "Emma": 52,
+        "Emily": 49,
+        "Matty": null,
+        "Jake": null,
+        "Skinny": 45
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2889.HEIC",
+      "timestamp": "2026-02-01T12:44:12.501500",
+      "ai_guess": {
+        "Emily": 46,
+        "Emma": 40,
+        "Jake": 57,
+        "Matty": null,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 40,
+        "Emily": 46,
+        "Matty": null,
+        "Jake": 57,
+        "Skinny": null
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2756.HEIC",
+      "timestamp": "2026-02-01T12:44:40.470989",
+      "ai_guess": {
+        "Emily": 45,
+        "Emma": 48,
+        "Jake": null,
+        "Matty": 44,
+        "Skinny": 37
+      },
+      "correct_answer": {
+        "Emma": 48,
+        "Emily": 45,
+        "Matty": 44,
+        "Jake": null,
+        "Skinny": 37
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3314.HEIC",
+      "timestamp": "2026-02-01T12:45:09.954339",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 35,
+        "Jake": 60,
+        "Matty": null,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 35,
+        "Emily": null,
+        "Matty": null,
+        "Jake": 60,
+        "Skinny": 37
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 37
+        }
+      ],
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "filename": "IMG_3147.HEIC",
+      "timestamp": "2026-02-01T12:45:32.170055",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 48,
+        "Jake": 48,
+        "Matty": 42,
+        "Skinny": 45
+      },
+      "correct_answer": {
+        "Emma": 48,
+        "Emily": null,
+        "Matty": 42,
+        "Jake": 48,
+        "Skinny": 46
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": 45,
+          "correct": 46
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2902.HEIC",
+      "timestamp": "2026-02-01T12:45:53.834670",
+      "ai_guess": {
+        "Emily": 42,
+        "Emma": 34,
+        "Jake": 38,
+        "Matty": 48,
+        "Skinny": 40
+      },
+      "correct_answer": {
+        "Emma": 34,
+        "Emily": 42,
+        "Matty": 48,
+        "Jake": 38,
+        "Skinny": 40
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3198.HEIC",
+      "timestamp": "2026-02-01T12:46:22.477014",
+      "ai_guess": {
+        "Emily": 36,
+        "Emma": 47,
+        "Jake": 49,
+        "Matty": 42,
+        "Skinny": 39
+      },
+      "correct_answer": {
+        "Emma": 47,
+        "Emily": 36,
+        "Matty": 42,
+        "Jake": 49,
+        "Skinny": 39
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2748.HEIC",
+      "timestamp": "2026-02-01T12:46:44.127719",
+      "ai_guess": {
+        "Emily": 47,
+        "Emma": 48,
+        "Jake": null,
+        "Matty": 43,
+        "Skinny": 47
+      },
+      "correct_answer": {
+        "Emma": 46,
+        "Emily": 47,
+        "Matty": 43,
+        "Jake": null,
+        "Skinny": 47
+      },
+      "errors": [
+        {
+          "player": "Emma",
+          "ai_guess": 48,
+          "correct": 46
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_3300.HEIC",
+      "timestamp": "2026-02-01T12:47:15.012921",
+      "ai_guess": {
+        "Emily": 40,
+        "Emma": 44,
+        "Jake": null,
+        "Matty": 48,
+        "Skinny": 51
+      },
+      "correct_answer": {
+        "Emma": 44,
+        "Emily": 40,
+        "Matty": 49,
+        "Jake": null,
+        "Skinny": 51
+      },
+      "errors": [
+        {
+          "player": "Matty",
+          "ai_guess": 48,
+          "correct": 49
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2655.HEIC",
+      "timestamp": "2026-02-01T12:47:36.182771",
+      "ai_guess": {
+        "Emily": 38,
+        "Emma": 55,
+        "Jake": null,
+        "Matty": 38,
+        "Skinny": 45
+      },
+      "correct_answer": {
+        "Emma": 55,
+        "Emily": 38,
+        "Matty": 38,
+        "Jake": null,
+        "Skinny": 45
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_1034.HEIC",
+      "timestamp": "2026-02-01T12:48:00.936169",
+      "ai_guess": {
+        "Emily": 44,
+        "Emma": 44,
+        "Jake": null,
+        "Matty": 31,
+        "Skinny": 57
+      },
+      "correct_answer": {
+        "Emma": 44,
+        "Emily": 44,
+        "Matty": 31,
+        "Jake": null,
+        "Skinny": 57
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3048.HEIC",
+      "timestamp": "2026-02-01T12:48:21.340962",
+      "ai_guess": {
+        "Emily": 45,
+        "Emma": 54,
+        "Jake": null,
+        "Matty": null,
+        "Skinny": 47
+      },
+      "correct_answer": {
+        "Emma": 54,
+        "Emily": 45,
+        "Matty": null,
+        "Jake": null,
+        "Skinny": 47
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2933.HEIC",
+      "timestamp": "2026-02-01T12:48:47.497567",
+      "ai_guess": {
+        "Emily": 37,
+        "Emma": 51,
+        "Jake": null,
+        "Matty": 55,
+        "Skinny": 41
+      },
+      "correct_answer": {
+        "Emma": 51,
+        "Emily": 37,
+        "Matty": 55,
+        "Jake": null,
+        "Skinny": 41
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2972.HEIC",
+      "timestamp": "2026-02-01T12:49:13.188848",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 43,
+        "Jake": 55,
+        "Matty": 43,
+        "Skinny": 43
+      },
+      "correct_answer": {
+        "Emma": 43,
+        "Emily": null,
+        "Matty": 43,
+        "Jake": 55,
+        "Skinny": 43
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2762.HEIC",
+      "timestamp": "2026-02-01T12:49:39.658803",
+      "ai_guess": {
+        "Emily": 31,
+        "Emma": 36,
+        "Jake": 48,
+        "Matty": 44,
+        "Skinny": 37
+      },
+      "correct_answer": {
+        "Emma": 36,
+        "Emily": 31,
+        "Matty": 44,
+        "Jake": 48,
+        "Skinny": 37
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3104.HEIC",
+      "timestamp": "2026-02-01T12:51:32.951476",
+      "ai_guess": {
+        "Emily": 37,
+        "Emma": 48,
+        "Jake": null,
+        "Matty": 41,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 48,
+        "Emily": 37,
+        "Matty": 41,
+        "Jake": null,
+        "Skinny": 57
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 57
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2898.HEIC",
+      "timestamp": "2026-02-01T12:51:59.755060",
+      "ai_guess": {
+        "Emily": 38,
+        "Emma": 41,
+        "Jake": 14,
+        "Matty": 38,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 41,
+        "Emily": 38,
+        "Matty": 38,
+        "Jake": 14,
+        "Skinny": null
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2856.HEIC",
+      "timestamp": "2026-02-01T12:52:34.656638",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 47,
+        "Jake": null,
+        "Matty": 54,
+        "Skinny": 41
+      },
+      "correct_answer": {
+        "Emma": 47,
+        "Emily": 39,
+        "Matty": 54,
+        "Jake": null,
+        "Skinny": null
+      },
+      "errors": [
+        {
+          "player": "Emily",
+          "ai_guess": null,
+          "correct": 39
+        }
+      ],
+      "accuracy": 0.6666666666666666
+    },
+    {
+      "filename": "IMG_3182.HEIC",
+      "timestamp": "2026-02-01T12:52:55.740518",
+      "ai_guess": {
+        "Emily": 39,
+        "Emma": 52,
+        "Jake": null,
+        "Matty": 49,
+        "Skinny": 50
+      },
+      "correct_answer": {
+        "Emma": 52,
+        "Emily": 39,
+        "Matty": 43,
+        "Jake": null,
+        "Skinny": 50
+      },
+      "errors": [
+        {
+          "player": "Matty",
+          "ai_guess": 49,
+          "correct": 43
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2685.HEIC",
+      "timestamp": "2026-02-01T12:53:16.285288",
+      "ai_guess": {
+        "Emily": null,
+        "Emma": 39,
+        "Jake": 52,
+        "Matty": 43,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 39,
+        "Emily": null,
+        "Matty": 43,
+        "Jake": 52,
+        "Skinny": 42
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 42
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_2637.HEIC",
+      "timestamp": "2026-02-01T12:53:36.144831",
+      "ai_guess": {
+        "Emily": 44,
+        "Emma": 55,
+        "Jake": null,
+        "Matty": 42,
+        "Skinny": 40
+      },
+      "correct_answer": {
+        "Emma": 55,
+        "Emily": 44,
+        "Matty": 42,
+        "Jake": null,
+        "Skinny": 40
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_3333.HEIC",
+      "timestamp": "2026-02-01T12:53:59.434226",
+      "ai_guess": {
+        "Emily": 26,
+        "Emma": 33,
+        "Jake": 49,
+        "Matty": 46,
+        "Skinny": 44
+      },
+      "correct_answer": {
+        "Emma": 33,
+        "Emily": 26,
+        "Matty": 46,
+        "Jake": 49,
+        "Skinny": 44
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2937.HEIC",
+      "timestamp": "2026-02-01T12:54:21.089652",
+      "ai_guess": {
+        "Emily": 43,
+        "Emma": 45,
+        "Jake": null,
+        "Matty": 50,
+        "Skinny": 45
+      },
+      "correct_answer": {
+        "Emma": 45,
+        "Emily": 43,
+        "Matty": 50,
+        "Jake": null,
+        "Skinny": 45
+      },
+      "errors": [],
+      "accuracy": 1.0
+    },
+    {
+      "filename": "IMG_2520.HEIC",
+      "timestamp": "2026-02-01T12:54:55.074333",
+      "ai_guess": {
+        "Emily": 34,
+        "Emma": 37,
+        "Jake": null,
+        "Matty": 48,
+        "Skinny": 60
+      },
+      "correct_answer": {
+        "Emma": 34,
+        "Emily": 34,
+        "Matty": 48,
+        "Jake": null,
+        "Skinny": 60
+      },
+      "errors": [
+        {
+          "player": "Emma",
+          "ai_guess": 37,
+          "correct": 34
+        }
+      ],
+      "accuracy": 0.75
+    },
+    {
+      "filename": "IMG_4905.HEIC",
+      "timestamp": "2026-02-01T12:55:18.240998",
+      "ai_guess": {
+        "Emily": 44,
+        "Emma": 52,
+        "Jake": null,
+        "Matty": 28,
+        "Skinny": null
+      },
+      "correct_answer": {
+        "Emma": 52,
+        "Emily": 44,
+        "Matty": 28,
+        "Jake": null,
+        "Skinny": 46
+      },
+      "errors": [
+        {
+          "player": "Skinny",
+          "ai_guess": null,
+          "correct": 46
+        }
+      ],
+      "accuracy": 0.75
+    }
+  ],
+  "stats": {
+    "total": 45,
+    "correct": 25
+  }
+}

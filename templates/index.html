@@ -50,13 +50,20 @@
             <h2>Grand Prix Points</h2>
             <p id="confidence-indicator" class="confidence"></p>
 
-            <div class="results-grid">
-                {% for player in players %}
-                <div class="result-row">
-                    <label for="pts-{{ player }}" class="player-name">{{ player }}</label>
-                    <input type="number" id="pts-{{ player }}" class="position-input" min="0" max="60" placeholder="-">
+            <div class="review-layout">
+                <div class="review-image">
+                    <img id="review-photo" class="review-photo" alt="Race results for review">
                 </div>
-                {% endfor %}
+                <div class="review-scores">
+                    <div class="results-grid">
+                        {% for player in players %}
+                        <div class="result-row">
+                            <label for="pts-{{ player }}" class="player-name">{{ player }}</label>
+                            <input type="number" id="pts-{{ player }}" class="position-input" min="0" max="60" placeholder="-">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
 
             <div class="button-group">
@@ -177,6 +184,9 @@
                     const conf = data.confidence || 'unknown';
                     confidenceIndicator.textContent = `AI Confidence: ${conf}`;
                     confidenceIndicator.className = 'confidence confidence-' + conf;
+
+                    // Show the uploaded photo for review
+                    document.getElementById('review-photo').src = currentImageData;
 
                     // Show results section
                     resultsSection.style.display = 'block';
