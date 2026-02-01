@@ -340,10 +340,9 @@ def get_summary_screenshot():
     """Take a screenshot of the Summary tab (clean, cropped view)."""
     try:
         spreadsheet_id = os.getenv("SPREADSHEET_ID")
-        summary_gid = os.getenv("SUMMARY_GID", "1357725660")  # Default to user's Summary tab
+        summary_gid = os.getenv("SUMMARY_GID", "1357725660")
 
         # Use the embedded/preview view for a cleaner look
-        # This shows just the cells without the Google Sheets UI chrome
         sheet_url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/preview#gid={summary_gid}"
 
         with sync_playwright() as p:
