@@ -43,7 +43,13 @@ def get_sheets_client():
     if not creds_json:
         raise ValueError("GOOGLE_CREDENTIALS environment variable not set")
 
-    creds_dict = json.loads(creds_json)
+    # Try to decode as base64 first (more reliable for env vars with newlines)
+    try:
+        decoded = base64.b64decode(creds_json).decode('utf-8')
+        creds_dict = json.loads(decoded)
+    except Exception:
+        # Fall back to direct JSON parsing
+        creds_dict = json.loads(creds_json)
     credentials = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
     return gspread.authorize(credentials)
 
