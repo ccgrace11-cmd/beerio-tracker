@@ -347,18 +347,18 @@ def get_summary_screenshot():
 
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
-            # Wider viewport to capture all columns
-            page = browser.new_page(viewport={"width": 1300, "height": 700})
+            # Wide viewport to capture tables and graphs
+            page = browser.new_page(viewport={"width": 1400, "height": 700})
 
             # Navigate to the sheet
-            page.goto(sheet_url, wait_until="domcontentloaded", timeout=60000)
+            page.goto(sheet_url, wait_until="networkidle", timeout=60000)
 
-            # Wait for the spreadsheet content to render
-            page.wait_for_timeout(4000)
+            # Wait longer for charts to render
+            page.wait_for_timeout(6000)
 
-            # Take screenshot - wider to capture all columns
+            # Take screenshot - capture full content
             screenshot_bytes = page.screenshot(
-                clip={"x": 0, "y": 0, "width": 1300, "height": 580}
+                clip={"x": 0, "y": 0, "width": 1400, "height": 580}
             )
             browser.close()
 
