@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beerio Race Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Beerio Race Tracker</h1>
+
+        <!-- Upload Section -->
+        <div class="section" id="upload-section">
+            <label for="race-type" class="label">Race Type</label>
+            <select id="race-type" class="select">
+                <option value="Beerio">Beerio</option>
+                <option value="Non-Beerio">Non-Beerio</option>
+            </select>
+
+            <label class="label">Players Racing</label>
+            <div class="players-grid">
+                {% for player in players %}
+                <label class="player-checkbox">
+                    <input type="checkbox" id="racing-{{ player }}" checked>
+                    <span class="checkmark"></span>
+                    {{ player }}
+                </label>
+                {% endfor %}
+            </div>
+
+            <label for="image-input" class="label">Race Results Photo</label>
+            <input type="file" id="image-input" accept="image/*" capture="environment" class="file-input">
+
+            <div id="preview-container" class="preview-container" style="display: none;">
+                <img id="image-preview" class="image-preview" alt="Race results preview">
+            </div>
+
+            <button id="parse-btn" class="btn btn-primary" disabled>Parse Results</button>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing race results...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="section" style="display: none;">
+            <h2>Race Results</h2>
+            <p id="confidence-indicator" class="confidence"></p>
+
+            <div class="results-grid">
+                {% for player in players %}
+                <div class="result-row">
+                    <label for="pos-{{ player }}" class="player-name">{{ player }}</label>
+                    <input type="number" id="pos-{{ player }}" class="position-input" min="1" max="5" placeholder="-">
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="button-group">
+                <button id="submit-btn" class="btn btn-success" onclick="handleSubmit()">Submit to Sheet</button>
+                <button id="reset-btn" class="btn btn-secondary">Start Over</button>
+            </div>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="status" class="status" style="display: none;"></div>
+
+        <!-- Summary Screenshot Section -->
+        <div id="screenshot-section" class="section" style="display: none;">
+            <h2>Season Summary</h2>
+            <div id="screenshot-loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading summary...</p>
+            </div>
+            <div id="screenshot-container" style="display: none;">
+                <img id="summary-screenshot" class="summary-image" alt="Season Summary">
+                <div class="button-group">
+                    <button id="download-btn" class="btn btn-primary">Save Image</button>
+                    <button id="new-race-btn" class="btn btn-secondary">Add Another Race</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Beerio Tracker JS loaded');
+
+        const imageInput = document.getElementById('image-input');
+        const imagePreview = document.getElementById('image-preview');
+        const previewContainer = document.getElementById('preview-container');
+        const parseBtn = document.getElementById('parse-btn');
+        const loading = document.getElementById('loading');
+        const resultsSection = document.getElementById('results-section');
+        const uploadSection = document.getElementById('upload-section');
+        const submitBtn = document.getElementById('submit-btn');
+        console.log('Submit button element:', submitBtn);
+        const resetBtn = document.getElementById('reset-btn');
+        const status = document.getElementById('status');
+        const raceType = document.getElementById('race-type');
+        const confidenceIndicator = document.getElementById('confidence-indicator');
+
+        let currentImageData = null;
+
+        // Handle image selection
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    currentImageData = e.target.result;
+                    imagePreview.src = currentImageData;
+                    previewContainer.style.display = 'block';
+                    parseBtn.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Get list of participating players
+        function getParticipatingPlayers() {
+            const players = ['Emma', 'Emily', 'Matty', 'Jake', 'Skinny'];
+            return players.filter(player => {
+                const checkbox = document.getElementById('racing-' + player);
+                return checkbox && checkbox.checked;
+            });
+        }
+
+        // Parse image
+        parseBtn.addEventListener('click', async () => {
+            if (!currentImageData) return;
+
+            const participatingPlayers = getParticipatingPlayers();
+            if (participatingPlayers.length === 0) {
+                showStatus('Please select at least one participating player', 'error');
+                return;
+            }
+
+            parseBtn.disabled = true;
+            loading.style.display = 'block';
+            status.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/parse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: currentImageData,
+                        participating_players: participatingPlayers
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    showStatus('Error: ' + data.error, 'error');
+                    parseBtn.disabled = false;
+                } else {
+                    // Populate results
+                    const positions = data.relative_positions;
+                    for (const [player, pos] of Object.entries(positions)) {
+                        const input = document.getElementById('pos-' + player);
+                        if (input) {
+                            input.value = pos || '';
+                        }
+                    }
+
+                    // Show confidence
+                    const conf = data.confidence || 'unknown';
+                    confidenceIndicator.textContent = `AI Confidence: ${conf}`;
+                    confidenceIndicator.className = 'confidence confidence-' + conf;
+
+                    // Show results section
+                    resultsSection.style.display = 'block';
+                    uploadSection.style.display = 'none';
+                }
+            } catch (err) {
+                showStatus('Error: ' + err.message, 'error');
+                parseBtn.disabled = false;
+            }
+
+            loading.style.display = 'none';
+        });
+
+        // Submit results
+        async function handleSubmit() {
+            console.log('Submit button clicked!');
+            submitBtn.disabled = true;
+
+            const positions = {};
+            const players = ['Emma', 'Emily', 'Matty', 'Jake', 'Skinny'];
+            for (const player of players) {
+                const input = document.getElementById('pos-' + player);
+                const val = input.value.trim();
+                positions[player] = val ? parseInt(val) : null;
+            }
+
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        race_type: raceType.value,
+                        positions: positions
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Submit response:', data);
+
+                if (data.error) {
+                    console.log('Submit error:', data.error);
+                    showStatus('Error: ' + data.error, 'error');
+                    submitBtn.disabled = false;
+                } else {
+                    console.log('Submit success, showing screenshot section');
+                    showStatus(data.message, 'success');
+                    // Show screenshot section and load screenshot
+                    resultsSection.style.display = 'none';
+                    document.getElementById('screenshot-section').style.display = 'block';
+                    document.getElementById('screenshot-loading').style.display = 'block';
+                    document.getElementById('screenshot-container').style.display = 'none';
+                    loadSummaryScreenshot();
+                }
+            } catch (err) {
+                showStatus('Error: ' + err.message, 'error');
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Load summary screenshot
+        async function loadSummaryScreenshot() {
+            console.log('Loading summary screenshot...');
+            try {
+                const response = await fetch('/api/screenshot');
+                console.log('Screenshot response:', response.status);
+                const data = await response.json();
+                console.log('Screenshot data:', data);
+
+                if (data.error) {
+                    showStatus('Error loading summary: ' + data.error, 'error');
+                    document.getElementById('screenshot-loading').style.display = 'none';
+                } else {
+                    document.getElementById('summary-screenshot').src = data.image;
+                    document.getElementById('screenshot-loading').style.display = 'none';
+                    document.getElementById('screenshot-container').style.display = 'block';
+                }
+            } catch (err) {
+                showStatus('Error loading summary: ' + err.message, 'error');
+                document.getElementById('screenshot-loading').style.display = 'none';
+            }
+        }
+
+        // Download screenshot
+        document.getElementById('download-btn').addEventListener('click', () => {
+            const img = document.getElementById('summary-screenshot');
+            const link = document.createElement('a');
+            link.download = `beerio-summary-${new Date().toISOString().split('T')[0]}.png`;
+            link.href = img.src;
+            link.click();
+        });
+
+        // Add another race
+        document.getElementById('new-race-btn').addEventListener('click', () => {
+            document.getElementById('screenshot-section').style.display = 'none';
+            resetForm();
+        });
+
+        // Reset form
+        resetBtn.addEventListener('click', resetForm);
+
+        function resetForm() {
+            currentImageData = null;
+            imageInput.value = '';
+            imagePreview.src = '';
+            previewContainer.style.display = 'none';
+            parseBtn.disabled = true;
+            submitBtn.disabled = false;
+            resultsSection.style.display = 'none';
+            uploadSection.style.display = 'block';
+            status.style.display = 'none';
+            document.getElementById('screenshot-section').style.display = 'none';
+
+            // Clear position inputs
+            const players = ['Emma', 'Emily', 'Matty', 'Jake', 'Skinny'];
+            for (const player of players) {
+                const input = document.getElementById('pos-' + player);
+                if (input) input.value = '';
+            }
+
+            // Re-check all player checkboxes
+            for (const player of players) {
+                const checkbox = document.getElementById('racing-' + player);
+                if (checkbox) checkbox.checked = true;
+            }
+        }
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = 'status status-' + type;
+            status.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

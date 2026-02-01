@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: beerio-tracker
+    runtime: python
+    buildCommand: pip install -r requirements.txt && playwright install chromium && playwright install-deps chromium
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GOOGLE_CREDENTIALS
+        sync: false
+      - key: SPREADSHEET_ID
+        sync: false
+      - key: SUMMARY_GID
+        sync: false
